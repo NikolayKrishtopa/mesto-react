@@ -1,104 +1,95 @@
-import './index.css'
-import logo from './images/logo.svg'
-import closeIcon from './images/close-icon.svg'
-import editIcon from './images/pensil-icon.svg'
-import addIcon from './images/plus-icon.svg'
+import React from 'react'
+import closeIcon from '../images/close-icon.svg'
+import editIcon from '../images/pensil-icon.svg'
+import addIcon from '../images/plus-icon.svg'
+import api from '../utils/api'
+import PopupWithPhoto from './PopupWithPhoto'
+import Card from './Card.js'
 
-function App() {
+export default function Main({ onEditProfile, onAddPlace, onEditAvatar }) {
+  const [userName, setUserName] = React.useState('')
+  const [userDescription, setUserDescription] = React.useState('')
+  const [userAvatar, setUserAvatar] = React.useState('')
+  const [id, setId] = React.useState('')
+  const [cards, setCards] = React.useState([])
+
+  React.useEffect(() => {
+    api.getUserInfo().then((userData) => {
+      setUserName(userData.name)
+      setUserDescription(userData.about)
+      setUserAvatar(userData.avatar)
+      setId(userData._id)
+    })
+  }, [])
+
+  React.useEffect(() => {
+    api.getInititalCards().then((cardsArr) => setCards(cardsArr))
+  }, [])
+
   return (
-    <div className="App">
-      <div className="page">
-        <header className="header">
-          <img src={logo} className="header__logo" />
-        </header>
-        <main className="content">
-          <section className="navigation">
-            <div className="profile">
+    <main className="content">
+      <section className="navigation">
+        <div className="profile">
+          <button
+            type="button"
+            aria-label="Редактировать фото профиля"
+            name="edit-avatar-button"
+            onClick={onEditAvatar}
+            className="profile__edit-avatar-button responsible-fade responsible-fade_opacity_strong"
+          >
+            <img src={userAvatar} alt="" className="profile__avatar" />
+          </button>
+          <div className="profile__info">
+            <div className="profile__container">
+              <h1 className="profile__name">{userName}</h1>
               <button
                 type="button"
-                aria-label="Редактировать фото профиля"
-                name="edit-avatar-button"
-                className="profile__edit-avatar-button responsible-fade responsible-fade_opacity_strong"
+                aria-label="Редактировать профиль"
+                name="edit-profile-button"
+                className="profile__edit-button responsible-fade"
+                onClick={onEditProfile}
               >
-                <img src="#" alt="" className="profile__avatar" />
+                <img
+                  src={editIcon}
+                  alt="редактировать профиль."
+                  className="profile__edit-icon"
+                />
               </button>
-              <div className="profile__info">
-                <div className="profile__container">
-                  <h1 className="profile__name">Жак-Ив Кусто</h1>
-                  <button
-                    type="button"
-                    aria-label="Редактировать профиль"
-                    name="edit-profile-button"
-                    className="profile__edit-button responsible-fade"
-                  >
-                    <img
-                      src={editIcon}
-                      alt="редактировать профиль."
-                      className="profile__edit-icon"
-                    />
-                  </button>
-                </div>
-                <p className="profile__description">исследователь океана</p>
-              </div>
             </div>
-            <button
-              type="button"
-              aria-label="Добавить ваше место"
-              name="add-card-button"
-              className="navigation__add-place-button responsible-fade"
-            >
-              <img
-                src={addIcon}
-                alt="добавить ваше место."
-                className="navigation__add-place-icon"
-              />
-            </button>
-          </section>
-          <section className="place-cards">
-            <template id="place-card-template">
-              <article className="place-card">
-                <button
-                  className="place-card__remove-button responsible-fade"
-                  type="button"
-                  aria-label="Удалить карточку."
-                >
-                  <img
-                    src="./images/trash-bin-icon.svg"
-                    alt="Удалить карточку."
-                    className="place-card__remove-button-icon"
-                  />
-                </button>
-                <img src="#" alt="#" className="place-card__photo" />
-                <div className="place-card__annotation">
-                  <h2 className="place-card__title">#</h2>
-                  <div className="place-card__like">
-                    <button
-                      type="button"
-                      aria-label="Мне нравится"
-                      className="place-card__like-button responsible-fade
-                responsible-fade_opacity_medium"
-                    >
-                      <img
-                        src="./images/like-icon.svg"
-                        alt="нравится!"
-                        className="place-card__like-icon"
-                      />
-                    </button>
-                    <p
-                      className="place-card__like-counter"
-                      id="like-counter"
-                    ></p>
-                  </div>
-                </div>
-              </article>
-            </template>
-          </section>
-        </main>
-        <footer className="footer">
-          <p className="footer__copyright">© 2020 Mesto Russia</p>
-        </footer>
-      </div>
-      <div className="popup popup_type_edit-profile">
+            <p className="profile__description">{userDescription}</p>
+          </div>
+        </div>
+        <button
+          type="button"
+          aria-label="Добавить ваше место"
+          name="add-card-button"
+          className="navigation__add-place-button responsible-fade"
+          onClick={onAddPlace}
+        >
+          <img
+            src={addIcon}
+            alt="добавить ваше место."
+            className="navigation__add-place-icon"
+          />
+        </button>
+      </section>
+      <section className="place-cards">
+        {cards.map((card) => {
+          return (
+            <Card
+              key={card._id}
+              id={card._id}
+              likes={card.likes}
+              link={card.link}
+              name={card.name}
+              currentUserId={id}
+              isOwn={card.owner._id === id}
+            />
+          )
+        })}
+      </section>
+
+      {/* <div className="popup popup_type_edit-profile">
         <div className="popup__container">
           <h3 className="popup__title">Редактировать профиль</h3>
           <form
@@ -130,7 +121,7 @@ function App() {
               type="submit"
               name="edit-profile-submit-button"
               className="popup__submit-button
-          responsible-fade responsible-fade_opacity_strong"
+  responsible-fade responsible-fade_opacity_strong"
             >
               Сохранить
             </button>
@@ -174,7 +165,7 @@ function App() {
               type="submit"
               name="add-card-submit-button"
               className="popup__submit-button
-          responsible-fade responsible-fade_opacity_strong"
+  responsible-fade responsible-fade_opacity_strong"
             >
               Создать
             </button>
@@ -191,24 +182,7 @@ function App() {
             />
           </button>
         </div>
-      </div>
-      <div className="popup popup_type_picture-full-screen">
-        <div className="popup__photo-container">
-          <button
-            type="button"
-            aria-label="закрыть окно."
-            className="popup__close-button  responsible-fade"
-          >
-            <img
-              src={closeIcon}
-              alt="Закрыть окно."
-              className="popup__close-icon"
-            />
-          </button>
-          <img src="#" alt="#" className="popup__photo" />
-          <h3 className="popup__title popup__title_type_photo">#</h3>
-        </div>
-      </div>
+      </div> */}
       <div className="popup popup_type_confirm">
         <div className="popup__container">
           <h3 className="popup__title">Вы уверены?</h3>
@@ -217,7 +191,7 @@ function App() {
             aria-label="Подтвердить удаление карточки"
             name="confirm-button"
             className="popup__submit-button popup__submit-button_type_confirm
-      responsible-fade responsible-fade_opacity_strong"
+responsible-fade responsible-fade_opacity_strong"
           >
             Да
           </button>
@@ -226,7 +200,7 @@ function App() {
             aria-label="Отменить удаление карточки"
             name="cancel-button"
             className="popup__submit-button popup__submit-button_type_cancel
-      responsible-fade responsible-fade_opacity_strong"
+responsible-fade responsible-fade_opacity_strong"
           >
             Нет
           </button>
@@ -243,7 +217,7 @@ function App() {
           </button>
         </div>
       </div>
-      <div className="popup popup_type_edit-avatar">
+      {/* <div className="popup popup_type_edit-avatar">
         <div className="popup__container">
           <h3 className="popup__title">Обновить аватар</h3>
           <form className="popup__form" name="edit-avatar" novalidate>
@@ -259,7 +233,7 @@ function App() {
               type="submit"
               name="edit-avatar-submit-button"
               className="popup__submit-button
-        responsible-fade responsible-fade_opacity_strong"
+responsible-fade responsible-fade_opacity_strong"
             >
               Сохранить
             </button>
@@ -276,7 +250,7 @@ function App() {
             />
           </button>
         </div>
-      </div>
+      </div> */}
       <div className="popup popup_type_page-loading">
         <img
           src="./images/spinner.gif"
@@ -284,8 +258,7 @@ function App() {
           className="popup__spinner"
         />
       </div>
-    </div>
+      <PopupWithPhoto />
+    </main>
   )
 }
-
-export default App
