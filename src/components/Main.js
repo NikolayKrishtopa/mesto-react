@@ -79,7 +79,7 @@ export default function Main({ onEditProfile, onAddPlace, onEditAvatar }) {
             <Card
               key={card._id}
               id={card._id}
-              likes={card.likes}
+              initialLikes={card.likes}
               link={card.link}
               name={card.name}
               currentUserId={id}

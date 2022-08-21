@@ -1,15 +1,30 @@
+import React from 'react'
 import trashBinIcon from '../images/trash-bin-icon.svg'
 import likeIcon from '../images/like-icon.svg'
+import api from '../utils/api'
 
 export default function Card({
   id,
   key,
-  likes,
+  initialLikes,
   link,
   name,
   currentUserId,
   isOwn,
 }) {
+  const [isLiked, setIsLiked] = React.useState(
+    initialLikes.filter((e) => e._id === currentUserId).length !== 0
+  )
+
+  const [likes, setLikes] = React.useState(initialLikes)
+
+  function handleLike() {
+    api.handleLikeServer(id, isLiked).then((res) => {
+      setIsLiked(res.likes.filter((e) => e._id === currentUserId).length !== 0)
+      setLikes(res.likes)
+    })
+  }
+
   return (
     <div key={key} id={id}>
       <article className="place-card">
@@ -38,7 +53,10 @@ export default function Card({
             <button
               type="button"
               aria-label="Мне нравится"
-              className="place-card__like-button responsible-fade responsible-fade_opacity_medium"
+              className={`place-card__like-button responsible-fade responsible-fade_opacity_medium ${
+                isLiked && 'place-card__like-button_active'
+              }`}
+              onClick={handleLike}
             >
               <img
                 src={likeIcon}
