@@ -3,7 +3,7 @@ import Main from './Main'
 import Footer from './Footer'
 import Header from './Header'
 import PopupWithForm from './PopupWithForm'
-import PopupWithPhoto from './PopupWithPhoto'
+import ImagePopup from './ImagePopup'
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
@@ -105,7 +105,7 @@ responsible-fade responsible-fade_opacity_strong"
             className="popup__spinner"
           />
         </div> */}
-        <PopupWithPhoto card={selectedCard} onClose={closeAllPopups} />
+        <ImagePopup card={selectedCard} onClose={closeAllPopups} />
         <Footer />
       </div>
     </div>
