@@ -1,13 +1,22 @@
 import closeIcon from '../images/close-icon.svg'
 
-export default function PopupWithPhoto() {
+export default function PopupWithPhoto({ card, onClose }) {
   return (
-    <div className="popup popup_type_picture-full-screen">
-      <div className="popup__photo-container">
+    <div
+      className={`popup popup_type_picture-full-screen ${
+        card && 'popup_active'
+      }`}
+      onClick={onClose}
+    >
+      <div
+        className="popup__photo-container"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           type="button"
           aria-label="закрыть окно."
           className="popup__close-button  responsible-fade"
+          onClick={onClose}
         >
           <img
             src={closeIcon}
@@ -15,8 +24,8 @@ export default function PopupWithPhoto() {
             className="popup__close-icon"
           />
         </button>
-        <img src="#" alt="#" className="popup__photo" />
-        <h3 className="popup__title popup__title_type_photo">#</h3>
+        <img src={card.link} alt={card.name} className="popup__photo" />
+        <h3 className="popup__title popup__title_type_photo">{card.name}</h3>
       </div>
     </div>
   )

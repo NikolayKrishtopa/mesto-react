@@ -4,6 +4,7 @@ import likeIcon from '../images/like-icon.svg'
 import api from '../utils/api'
 
 export default function Card({
+  card,
   id,
   key,
   initialLikes,
@@ -11,12 +12,17 @@ export default function Card({
   name,
   currentUserId,
   isOwn,
+  onCardClick,
 }) {
   const [isLiked, setIsLiked] = React.useState(
     initialLikes.filter((e) => e._id === currentUserId).length !== 0
   )
 
   const [likes, setLikes] = React.useState(initialLikes)
+
+  function handleClick() {
+    onCardClick(card)
+  }
 
   function handleLike() {
     api.handleLikeServer(id, isLiked).then((res) => {
@@ -45,7 +51,7 @@ export default function Card({
           src={link}
           alt={name}
           className="place-card__photo"
-          onClick={() => console.log([currentUserId, id])}
+          onClick={handleClick}
         />
         <div className="place-card__annotation">
           <h2 className="place-card__title">{name}</h2>
