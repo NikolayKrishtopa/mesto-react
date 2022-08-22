@@ -79,17 +79,7 @@ export default function Main({
       <section className="place-cards">
         {cards.map((card) => {
           return (
-            <Card
-              card={card}
-              key={card._id}
-              id={card._id}
-              initialLikes={card.likes}
-              link={card.link}
-              name={card.name}
-              currentUserId={id}
-              isOwn={card.owner._id === id}
-              onCardClick={onCardClick}
-            />
+            <Card card={card} currentUserId={id} onCardClick={onCardClick} />
           )
         })}
       </section>

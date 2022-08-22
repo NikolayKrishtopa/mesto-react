@@ -3,17 +3,11 @@ import trashBinIcon from '../images/trash-bin-icon.svg'
 import likeIcon from '../images/like-icon.svg'
 import api from '../utils/api'
 
-export default function Card({
-  card,
-  id,
-  key,
-  initialLikes,
-  link,
-  name,
-  currentUserId,
-  isOwn,
-  onCardClick,
-}) {
+export default function Card({ card, currentUserId, onCardClick }) {
+  const { _id: id, likes: initialLikes, link, name } = card
+
+  const isOwn = card.owner._id === currentUserId
+
   const [isLiked, setIsLiked] = React.useState(
     initialLikes.filter((e) => e._id === currentUserId).length !== 0
   )
@@ -32,7 +26,7 @@ export default function Card({
   }
 
   return (
-    <div key={key} id={id}>
+    <div key={id} id={id}>
       <article className="place-card">
         {isOwn && (
           <button
