@@ -7,6 +7,7 @@ import ImagePopup from './ImagePopup'
 import AvatarInputs from './AvatarInputs'
 import ProfileInputs from './ProfileInputs'
 import PlaceInputs from './PlaceInputs'
+import PopupLoading from './PopupLoading'
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
@@ -14,6 +15,7 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
   const [isConfirmPopupOpen, setisConfirmPopupOpen] = useState(false)
   const [selectedCard, setSelectedCard] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
 
   function handleCardClick(card) {
     setSelectedCard(card)
@@ -42,12 +44,15 @@ function App() {
   function handleRemoveClick() {
     setisConfirmPopupOpen(true)
   }
+
   document.addEventListener('keyup', (evt) => {
     evt.key === 'Escape' && closeAllPopups()
   })
+
   return (
     <div className="App">
-      <div className="page">
+      {isLoading && <PopupLoading />}
+      <div className={`page ${isLoading && 'page_loading'}`}>
         <Header />
         <Main
           onEditProfile={handleEditProfileClick}
@@ -55,6 +60,7 @@ function App() {
           onEditAvatar={handleEditAvatarClick}
           onCardClick={handleCardClick}
           onRemoveClick={handleRemoveClick}
+          onLoading={setIsLoading}
         />
         <PopupWithForm
           name="edit-profile"

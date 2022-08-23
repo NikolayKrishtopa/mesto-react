@@ -3,7 +3,6 @@ import editIcon from '../images/pensil-icon.svg'
 import addIcon from '../images/plus-icon.svg'
 import api from '../utils/api'
 import Card from './Card.js'
-import PopupLoading from './PopupLoading'
 
 export default function Main({
   onEditProfile,
@@ -11,13 +10,13 @@ export default function Main({
   onEditAvatar,
   onCardClick,
   onRemoveClick,
+  onLoading,
 }) {
   const [userName, setUserName] = useState('')
   const [userDescription, setUserDescription] = useState('')
   const [userAvatar, setUserAvatar] = useState('')
   const [id, setId] = useState('')
   const [cards, setCards] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     Promise.all([api.getUserInfo(), api.getInititalCards()])
@@ -29,12 +28,11 @@ export default function Main({
         setCards(cardsArr)
       })
       .catch((err) => console.log(err))
-      .finally(setIsLoading(false))
+      .finally(onLoading(false))
   }, [])
 
   return (
     <main className="content">
-      {isLoading && <PopupLoading />}
       <section className="navigation">
         <div className="profile">
           <button
