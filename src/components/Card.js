@@ -3,7 +3,12 @@ import trashBinIcon from '../images/trash-bin-icon.svg'
 import likeIcon from '../images/like-icon.svg'
 import api from '../utils/api'
 
-export default function Card({ card, currentUserId, onCardClick }) {
+export default function Card({
+  card,
+  currentUserId,
+  onCardClick,
+  onRemoveClick,
+}) {
   const { _id: id, likes: initialLikes, link, name } = card
 
   const isOwn = card.owner._id === currentUserId
@@ -28,19 +33,20 @@ export default function Card({ card, currentUserId, onCardClick }) {
   return (
     <div key={id} id={id}>
       <article className="place-card">
-        {isOwn && (
-          <button
-            className="place-card__remove-button responsible-fade"
-            type="button"
-            aria-label="Удалить карточку."
-          >
-            <img
-              src={trashBinIcon}
-              alt="Удалить карточку."
-              className="place-card__remove-button-icon"
-            />
-          </button>
-        )}
+        {/* {isOwn && ( */}
+        <button
+          className="place-card__remove-button responsible-fade"
+          type="button"
+          aria-label="Удалить карточку."
+          onClick={onRemoveClick}
+        >
+          <img
+            src={trashBinIcon}
+            alt="Удалить карточку."
+            className="place-card__remove-button-icon"
+          />
+        </button>
+        {/* )} */}
         <img
           src={link}
           alt={name}

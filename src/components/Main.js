@@ -10,6 +10,7 @@ export default function Main({
   onAddPlace,
   onEditAvatar,
   onCardClick,
+  onRemoveClick,
 }) {
   const [userName, setUserName] = useState('')
   const [userDescription, setUserDescription] = useState('')
@@ -82,7 +83,12 @@ export default function Main({
       <section className="place-cards">
         {cards.map((card) => {
           return (
-            <Card card={card} currentUserId={id} onCardClick={onCardClick} />
+            <Card
+              card={card}
+              currentUserId={id}
+              onCardClick={onCardClick}
+              onRemoveClick={onRemoveClick}
+            />
           )
         })}
       </section>

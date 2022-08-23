@@ -4,11 +4,15 @@ import Footer from './Footer'
 import Header from './Header'
 import PopupWithForm from './PopupWithForm'
 import ImagePopup from './ImagePopup'
+import AvatarInputs from './AvatarInputs'
+import ProfileInputs from './ProfileInputs'
+import PlaceInputs from './PlaceInputs'
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
+  const [isConfirmPopupOpen, setisConfirmPopupOpen] = useState(false)
   const [selectedCard, setSelectedCard] = useState('')
 
   function handleCardClick(card) {
@@ -20,6 +24,7 @@ function App() {
     setIsEditProfilePopupOpen(false)
     setIsAddPlacePopupOpen(false)
     setSelectedCard('')
+    setisConfirmPopupOpen(false)
   }
 
   function handleEditAvatarClick() {
@@ -33,6 +38,13 @@ function App() {
   function handleAddPlaceClick() {
     setIsAddPlacePopupOpen(true)
   }
+
+  function handleRemoveClick() {
+    setisConfirmPopupOpen(true)
+  }
+  document.addEventListener('keyup', (evt) => {
+    evt.key === 'Escape' && closeAllPopups()
+  })
   return (
     <div className="App">
       <div className="page">
@@ -42,69 +54,40 @@ function App() {
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
           onCardClick={handleCardClick}
+          onRemoveClick={handleRemoveClick}
         />
         <PopupWithForm
           name="edit-profile"
           title="Редактировать профиль"
-          children=""
+          children={<ProfileInputs />}
           isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
+          buttonText="Сохранить"
         />
         <PopupWithForm
           name="edit-avatar"
           title="Обновить аватар"
-          children=""
+          children={<AvatarInputs />}
           isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
+          buttonText="Сохранить"
         />
         <PopupWithForm
           name="add-card"
           title="Новое место"
-          children=""
+          children={<PlaceInputs />}
           isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
+          buttonText="Создать"
         />
-        {/* <div className="popup popup_type_confirm">
-          <div className="popup__container">
-            <h3 className="popup__title">Вы уверены?</h3>
-            <button
-              type="button"
-              aria-label="Подтвердить удаление карточки"
-              name="confirm-button"
-              className="popup__submit-button popup__submit-button_type_confirm
-responsible-fade responsible-fade_opacity_strong"
-            >
-              Да
-            </button>
-            <button
-              type="button"
-              aria-label="Отменить удаление карточки"
-              name="cancel-button"
-              className="popup__submit-button popup__submit-button_type_cancel
-responsible-fade responsible-fade_opacity_strong"
-            >
-              Нет
-            </button>
-            <button
-              type="button"
-              aria-label="Отменить"
-              className="popup__close-button responsible-fade"
-            >
-              <img
-                src={closeIcon}
-                alt="Закрыть окно"
-                className="popup__close-icon"
-              />
-            </button>
-          </div>
-        </div>
-        <div className="popup popup_type_page-loading">
-          <img
-            src="./images/spinner.gif"
-            alt="Идет загрузка"
-            className="popup__spinner"
-          />
-        </div> */}
+        <PopupWithForm
+          name="confirm"
+          title="Вы уверены?"
+          children=""
+          isOpen={isConfirmPopupOpen}
+          onClose={closeAllPopups}
+          buttonText="Да"
+        />
         <ImagePopup card={selectedCard} onClose={closeAllPopups} />
         <Footer />
       </div>

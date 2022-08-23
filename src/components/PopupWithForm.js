@@ -6,6 +6,7 @@ export default function PopupWithForm({
   children,
   isOpen,
   onClose,
+  buttonText,
 }) {
   return (
     <div
@@ -26,7 +27,7 @@ export default function PopupWithForm({
             className="popup__submit-button
 responsible-fade responsible-fade_opacity_strong"
           >
-            Сохранить
+            {buttonText}
           </button>
         </form>
         <button
