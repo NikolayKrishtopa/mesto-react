@@ -1,8 +1,9 @@
-import React from 'react'
+import { useState, useEffect } from 'react'
 import editIcon from '../images/pensil-icon.svg'
 import addIcon from '../images/plus-icon.svg'
 import api from '../utils/api'
 import Card from './Card.js'
+import PopupLoading from './PopupLoading'
 
 export default function Main({
   onEditProfile,
@@ -10,27 +11,29 @@ export default function Main({
   onEditAvatar,
   onCardClick,
 }) {
-  const [userName, setUserName] = React.useState('')
-  const [userDescription, setUserDescription] = React.useState('')
-  const [userAvatar, setUserAvatar] = React.useState('')
-  const [id, setId] = React.useState('')
-  const [cards, setCards] = React.useState([])
+  const [userName, setUserName] = useState('')
+  const [userDescription, setUserDescription] = useState('')
+  const [userAvatar, setUserAvatar] = useState('')
+  const [id, setId] = useState('')
+  const [cards, setCards] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
-  React.useEffect(() => {
-    api.getUserInfo().then((userData) => {
-      setUserName(userData.name)
-      setUserDescription(userData.about)
-      setUserAvatar(userData.avatar)
-      setId(userData._id)
-    })
-  }, [])
-
-  React.useEffect(() => {
-    api.getInititalCards().then((cardsArr) => setCards(cardsArr))
+  useEffect(() => {
+    Promise.all([api.getUserInfo(), api.getInititalCards()])
+      .then(([userData, cardsArr]) => {
+        setUserName(userData.name)
+        setUserDescription(userData.about)
+        setUserAvatar(userData.avatar)
+        setId(userData._id)
+        setCards(cardsArr)
+      })
+      .catch((err) => console.log(err))
+      .finally(setIsLoading(false))
   }, [])
 
   return (
     <main className="content">
+      {isLoading && <PopupLoading />}
       <section className="navigation">
         <div className="profile">
           <button
