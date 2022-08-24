@@ -31,7 +31,7 @@ export default function Card({
   }
 
   return (
-    <div key={id} id={id}>
+    <div id={id}>
       <article className="place-card">
         {/* {isOwn && ( */}
         <button

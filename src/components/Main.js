@@ -15,7 +15,7 @@ export default function Main({
   const [userName, setUserName] = useState('')
   const [userDescription, setUserDescription] = useState('')
   const [userAvatar, setUserAvatar] = useState('')
-  const [id, setId] = useState('')
+  const [userId, setUserId] = useState('')
   const [cards, setCards] = useState([])
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export default function Main({
         setUserName(userData.name)
         setUserDescription(userData.about)
         setUserAvatar(userData.avatar)
-        setId(userData._id)
+        setUserId(userData._id)
         setCards(cardsArr)
       })
       .catch((err) => console.log(err))
@@ -82,8 +82,9 @@ export default function Main({
         {cards.map((card) => {
           return (
             <Card
+              key={card._id}
               card={card}
-              currentUserId={id}
+              currentUserId={userId}
               onCardClick={onCardClick}
               onRemoveClick={onRemoveClick}
             />

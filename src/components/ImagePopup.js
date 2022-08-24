@@ -1,10 +1,23 @@
 import closeIcon from '../images/close-icon.svg'
+import { useEffect } from 'react'
 
 export default function ImagePopup({ card, onClose }) {
+  function handleCloseByEsc(evt) {
+    evt.key === 'Escape' && onClose()
+  }
+
+  useEffect(() => {
+    document.addEventListener('keyup', handleCloseByEsc)
+
+    return () => {
+      document.removeEventListener('keyup', handleCloseByEsc)
+    }
+  }, [])
+
   return (
     <div
       className={`popup popup_type_picture-full-screen ${
-        card && 'popup_active'
+        Object.keys(card).length !== 0 && 'popup_active'
       }`}
       onClick={onClose}
     >
