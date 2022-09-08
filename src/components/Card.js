@@ -1,52 +1,52 @@
-import React from 'react'
+import { useState, useContext } from 'react'
 import trashBinIcon from '../images/trash-bin-icon.svg'
 import likeIcon from '../images/like-icon.svg'
 import api from '../utils/api'
+import CurrentUserContext from '../contexts.js/CurrentUserContext'
 
-export default function Card({
-  card,
-  currentUserId,
-  onCardClick,
-  onRemoveClick,
-}) {
-  const { _id: id, likes: initialLikes, link, name } = card
+export default function Card(props) {
+  const { card, onCardClick, onRemoveClick } = props
+  const { _id: cardId, likes: initialLikes, link, name } = card
 
-  const isOwn = card.owner._id === currentUserId
+  const currentUser = useContext(CurrentUserContext)
+  const isOwn = card.owner._id === currentUser._id
 
-  const [isLiked, setIsLiked] = React.useState(
-    initialLikes.filter((e) => e._id === currentUserId).length !== 0
+  const [isLiked, setIsLiked] = useState(
+    initialLikes.filter((e) => e._id === currentUser._id).length !== 0
   )
 
-  const [likes, setLikes] = React.useState(initialLikes)
+  const [likes, setLikes] = useState(initialLikes)
 
   function handleClick() {
     onCardClick(card)
   }
 
   function handleLike() {
-    api.handleLikeServer(id, isLiked).then((res) => {
-      setIsLiked(res.likes.filter((e) => e._id === currentUserId).length !== 0)
+    api.handleLikeServer(cardId, isLiked).then((res) => {
+      setIsLiked(
+        res.likes.filter((e) => e._id === currentUser._id).length !== 0
+      )
       setLikes(res.likes)
     })
   }
 
   return (
-    <div id={id}>
+    <div id={cardId}>
       <article className="place-card">
-        {/* {isOwn && ( */}
-        <button
-          className="place-card__remove-button responsible-fade"
-          type="button"
-          aria-label="Удалить карточку."
-          onClick={onRemoveClick}
-        >
-          <img
-            src={trashBinIcon}
-            alt="Удалить карточку."
-            className="place-card__remove-button-icon"
-          />
-        </button>
-        {/* )} */}
+        {isOwn && (
+          <button
+            className="place-card__remove-button responsible-fade"
+            type="button"
+            aria-label="Удалить карточку."
+            onClick={onRemoveClick}
+          >
+            <img
+              src={trashBinIcon}
+              alt="Удалить карточку."
+              className="place-card__remove-button-icon"
+            />
+          </button>
+        )}
         <img
           src={link}
           alt={name}

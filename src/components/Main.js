@@ -1,34 +1,27 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import editIcon from '../images/pensil-icon.svg'
 import addIcon from '../images/plus-icon.svg'
-import api from '../utils/api'
 import Card from './Card.js'
+import CurrentUserContext from '../contexts.js/CurrentUserContext'
+import api from '../utils/api'
 
-export default function Main({
-  onEditProfile,
-  onAddPlace,
-  onEditAvatar,
-  onCardClick,
-  onRemoveClick,
-  onLoading,
-}) {
-  const [userName, setUserName] = useState('')
-  const [userDescription, setUserDescription] = useState('')
-  const [userAvatar, setUserAvatar] = useState('')
-  const [userId, setUserId] = useState('')
+export default function Main(props) {
+  const {
+    onEditProfile,
+    onAddPlace,
+    onEditAvatar,
+    onCardClick,
+    onRemoveClick,
+  } = props
+
+  const currentUser = useContext(CurrentUserContext)
   const [cards, setCards] = useState([])
 
   useEffect(() => {
-    Promise.all([api.getUserInfo(), api.getInititalCards()])
-      .then(([userData, cardsArr]) => {
-        setUserName(userData.name)
-        setUserDescription(userData.about)
-        setUserAvatar(userData.avatar)
-        setUserId(userData._id)
-        setCards(cardsArr)
-      })
+    api
+      .getInititalCards()
+      .then((cardsArr) => setCards(cardsArr))
       .catch((err) => console.log(err))
-      .finally(onLoading(false))
   }, [])
 
   return (
@@ -42,11 +35,11 @@ export default function Main({
             onClick={onEditAvatar}
             className="profile__edit-avatar-button responsible-fade responsible-fade_opacity_strong"
           >
-            <img src={userAvatar} alt="" className="profile__avatar" />
+            <img src={currentUser.avatar} alt="" className="profile__avatar" />
           </button>
           <div className="profile__info">
             <div className="profile__container">
-              <h1 className="profile__name">{userName}</h1>
+              <h1 className="profile__name">{currentUser.name}</h1>
               <button
                 type="button"
                 aria-label="Редактировать профиль"
@@ -61,7 +54,7 @@ export default function Main({
                 />
               </button>
             </div>
-            <p className="profile__description">{userDescription}</p>
+            <p className="profile__description">{currentUser.about}</p>
           </div>
         </div>
         <button
@@ -84,7 +77,6 @@ export default function Main({
             <Card
               key={card._id}
               card={card}
-              currentUserId={userId}
               onCardClick={onCardClick}
               onRemoveClick={onRemoveClick}
             />
