@@ -1,9 +1,8 @@
-import { useState, useEffect, useContext } from 'react'
+import { useContext } from 'react'
 import editIcon from '../images/pensil-icon.svg'
 import addIcon from '../images/plus-icon.svg'
 import Card from './Card.js'
 import CurrentUserContext from '../contexts.js/CurrentUserContext'
-import api from '../utils/api'
 
 export default function Main(props) {
   const {
@@ -13,7 +12,6 @@ export default function Main(props) {
     onCardClick,
     onRemoveClick,
     cards,
-    onCardDelete,
     onCardLike,
   } = props
 
@@ -73,7 +71,7 @@ export default function Main(props) {
               key={card._id}
               card={card}
               onCardClick={onCardClick}
-              onRemoveClick={onCardDelete}
+              onRemoveClick={onRemoveClick}
               onCardLike={onCardLike}
             />
           )

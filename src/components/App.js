@@ -15,11 +15,11 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false)
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false)
-  const [isConfirmPopupOpen, setisConfirmPopupOpen] = useState(false)
   const [selectedCard, setSelectedCard] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [currentUser, setCurrentUser] = useState({})
   const [cards, setCards] = useState([])
+  const [cardToRemove, setCardToRemove] = useState({})
 
   function handleCardLike(card, isLiked) {
     api
@@ -27,13 +27,16 @@ function App() {
       .then((newCard) =>
         setCards(cards.map((e) => (newCard._id === e._id ? newCard : e)))
       )
+      .catch((err) => console.log(err))
   }
 
-  function handleCardDelete(card) {
+  function handleCardDelete(e) {
+    e.preventDefault()
     api
-      .removeCard(card)
-      .then(setCards(cards.filter((e) => e._id !== card._id)))
+      .removeCard(cardToRemove)
+      .then(setCards(cards.filter((e) => e._id !== cardToRemove._id)))
       .catch((err) => console.log(err))
+      .finally(closeAllPopups())
   }
 
   useEffect(() => {
@@ -55,7 +58,7 @@ function App() {
     setIsEditProfilePopupOpen(false)
     setIsAddPlacePopupOpen(false)
     setSelectedCard({})
-    setisConfirmPopupOpen(false)
+    setCardToRemove({})
   }
 
   function handleEditAvatarClick() {
@@ -70,8 +73,8 @@ function App() {
     setIsAddPlacePopupOpen(true)
   }
 
-  function handleRemoveClick() {
-    setisConfirmPopupOpen(true)
+  function handleRemoveClick(card) {
+    setCardToRemove(card)
   }
 
   function handleUpdateUser(user) {
@@ -104,7 +107,6 @@ function App() {
             onCardClick={handleCardClick}
             onRemoveClick={handleRemoveClick}
             cards={cards}
-            onCardDelete={handleCardDelete}
             onCardLike={handleCardLike}
           />
           <EditProfilePopup
@@ -128,9 +130,9 @@ function App() {
           <PopupWithForm
             name="confirm"
             title="Вы уверены?"
-            children=""
-            isOpen={isConfirmPopupOpen}
+            isOpen={Object.keys(cardToRemove).length > 0}
             onClose={closeAllPopups}
+            onSubmit={handleCardDelete}
             buttonText="Да"
           />
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />
