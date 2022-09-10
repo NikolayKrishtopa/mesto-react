@@ -37,19 +37,29 @@ function App() {
   }
 
   useEffect(() => {
-    api
-      .getInititalCards()
-      .then((cardsArr) => setCards(cardsArr))
-      .catch((err) => console.log(err))
-  }, [])
-
-  useEffect(() => {
-    api
-      .getUserInfo()
-      .then((userData) => setCurrentUser(userData))
+    Promise.all([api.getInititalCards(), api.getUserInfo()])
+      .then(([cardsArr, userData]) => {
+        setCards(cardsArr)
+        setCurrentUser(userData)
+      })
       .catch((err) => console.log(err))
       .finally(setIsLoading(false))
   }, [])
+
+  // useEffect(() => {
+  //   api
+  //     .getInititalCards()
+  //     .then((cardsArr) => setCards(cardsArr))
+  //     .catch((err) => console.log(err))
+  // }, [])
+
+  // useEffect(() => {
+  //   api
+  //     .getUserInfo()
+  //     .then((userData) => setCurrentUser(userData))
+  //     .catch((err) => console.log(err))
+  //     .finally(setIsLoading(false))
+  // }, [])
 
   function handleCardClick(card) {
     setSelectedCard(card)
