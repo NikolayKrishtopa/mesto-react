@@ -25,6 +25,13 @@ export default function Main(props) {
       )
   }
 
+  function handleCardDelete(card) {
+    api
+      .removeCard(card)
+      .then(setCards(cards.filter((e) => e._id !== card._id)))
+      .catch((err) => console.log(err))
+  }
+
   useEffect(() => {
     api
       .getInititalCards()
@@ -86,7 +93,7 @@ export default function Main(props) {
               key={card._id}
               card={card}
               onCardClick={onCardClick}
-              onRemoveClick={onRemoveClick}
+              onRemoveClick={handleCardDelete}
               onCardLike={handleCardLike}
             />
           )

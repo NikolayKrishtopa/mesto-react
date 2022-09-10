@@ -20,7 +20,7 @@ export default function Card(props) {
   function handleLike() {
     onCardLike(card, isLiked)
   }
-  console.log(card.likes)
+
   return (
     <div id={cardId}>
       <article className="place-card">
@@ -29,7 +29,7 @@ export default function Card(props) {
             className="place-card__remove-button responsible-fade"
             type="button"
             aria-label="Удалить карточку."
-            onClick={onRemoveClick}
+            onClick={() => onRemoveClick(card)}
           >
             <img
               src={trashBinIcon}
