@@ -19,6 +19,29 @@ function App() {
   const [selectedCard, setSelectedCard] = useState({})
   const [isLoading, setIsLoading] = useState(true)
   const [currentUser, setCurrentUser] = useState({})
+  const [cards, setCards] = useState([])
+
+  function handleCardLike(card, isLiked) {
+    api
+      .handleLikeServer(card, isLiked)
+      .then((newCard) =>
+        setCards(cards.map((e) => (newCard._id === e._id ? newCard : e)))
+      )
+  }
+
+  function handleCardDelete(card) {
+    api
+      .removeCard(card)
+      .then(setCards(cards.filter((e) => e._id !== card._id)))
+      .catch((err) => console.log(err))
+  }
+
+  useEffect(() => {
+    api
+      .getInititalCards()
+      .then((cardsArr) => setCards(cardsArr))
+      .catch((err) => console.log(err))
+  }, [])
 
   useEffect(() => {
     api
@@ -75,6 +98,9 @@ function App() {
             onEditAvatar={handleEditAvatarClick}
             onCardClick={handleCardClick}
             onRemoveClick={handleRemoveClick}
+            cards={cards}
+            onCardDelete={handleCardDelete}
+            onCardLike={handleCardLike}
           />
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}

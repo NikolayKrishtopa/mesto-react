@@ -12,32 +12,12 @@ export default function Main(props) {
     onEditAvatar,
     onCardClick,
     onRemoveClick,
+    cards,
+    onCardDelete,
+    onCardLike,
   } = props
 
   const currentUser = useContext(CurrentUserContext)
-  const [cards, setCards] = useState([])
-
-  function handleCardLike(card, isLiked) {
-    api
-      .handleLikeServer(card, isLiked)
-      .then((newCard) =>
-        setCards(cards.map((e) => (newCard._id === e._id ? newCard : e)))
-      )
-  }
-
-  function handleCardDelete(card) {
-    api
-      .removeCard(card)
-      .then(setCards(cards.filter((e) => e._id !== card._id)))
-      .catch((err) => console.log(err))
-  }
-
-  useEffect(() => {
-    api
-      .getInititalCards()
-      .then((cardsArr) => setCards(cardsArr))
-      .catch((err) => console.log(err))
-  }, [])
 
   return (
     <main className="content">
@@ -93,8 +73,8 @@ export default function Main(props) {
               key={card._id}
               card={card}
               onCardClick={onCardClick}
-              onRemoveClick={handleCardDelete}
-              onCardLike={handleCardLike}
+              onRemoveClick={onCardDelete}
+              onCardLike={onCardLike}
             />
           )
         })}
