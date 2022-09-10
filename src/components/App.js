@@ -5,11 +5,11 @@ import Header from './Header'
 import PopupWithForm from './PopupWithForm'
 import ImagePopup from './ImagePopup'
 import AvatarInputs from './AvatarInputs'
-import PlaceInputs from './PlaceInputs'
 import PopupLoading from './PopupLoading'
 import api from '../utils/api'
 import CurrentUserContext from '../contexts.js/CurrentUserContext'
 import EditProfilePopup from './EditProfilePopup'
+import AddPlacePopup from './AddPlacePopup'
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
@@ -46,21 +46,6 @@ function App() {
       .finally(setIsLoading(false))
   }, [])
 
-  // useEffect(() => {
-  //   api
-  //     .getInititalCards()
-  //     .then((cardsArr) => setCards(cardsArr))
-  //     .catch((err) => console.log(err))
-  // }, [])
-
-  // useEffect(() => {
-  //   api
-  //     .getUserInfo()
-  //     .then((userData) => setCurrentUser(userData))
-  //     .catch((err) => console.log(err))
-  //     .finally(setIsLoading(false))
-  // }, [])
-
   function handleCardClick(card) {
     setSelectedCard(card)
   }
@@ -96,6 +81,16 @@ function App() {
     })
   }
 
+  function handleAddCard(card) {
+    api
+      .createNewCard(card)
+      .then((res) => {
+        setCards([res, ...cards])
+        closeAllPopups()
+      })
+      .catch((err) => console.log(err))
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
@@ -125,13 +120,10 @@ function App() {
             onClose={closeAllPopups}
             buttonText="Сохранить"
           />
-          <PopupWithForm
-            name="add-card"
-            title="Новое место"
-            children={<PlaceInputs />}
+          <AddPlacePopup
             isOpen={isAddPlacePopupOpen}
             onClose={closeAllPopups}
-            buttonText="Создать"
+            onAddCard={handleAddCard}
           />
           <PopupWithForm
             name="confirm"

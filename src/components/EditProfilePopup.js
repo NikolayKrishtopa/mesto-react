@@ -14,7 +14,7 @@ export default function EditProfilePopup(props) {
     setAbout(currentUser.about)
   }, [isOpen])
 
-  function handleSubmtit(e) {
+  function handleSubmit(e) {
     e.preventDefault()
     onUpdateUser({ name, about })
   }
@@ -28,7 +28,7 @@ export default function EditProfilePopup(props) {
         onClose()
       }}
       buttonText="Сохранить"
-      onSubmit={handleSubmtit}
+      onSubmit={handleSubmit}
     >
       <ProfileInputs
         userName={name}

@@ -7,6 +7,7 @@ export default function ProfileInputs(props) {
         className="popup__field popup__field_type_user-name"
         name="name"
         id="name"
+        placeholder="Имя пользователя"
         required
         minLength="2"
         maxLength="40"
@@ -19,6 +20,7 @@ export default function ProfileInputs(props) {
         className="popup__field popup__field_type_user-description"
         id="about"
         name="about"
+        placeholder="Расскажите о себе"
         required
         minLength="2"
         maxLength="200"
