@@ -2,7 +2,16 @@ import closeIcon from '../images/close-icon.svg'
 import { useEffect } from 'react'
 
 export default function PopupWithForm(props) {
-  const { name, title, children, isOpen, onClose, buttonText, onSubmit } = props
+  const {
+    name,
+    title,
+    children,
+    isOpen,
+    onClose,
+    buttonText,
+    onSubmit,
+    isSaving,
+  } = props
 
   function handleCloseByEsc(evt) {
     evt.key === 'Escape' && onClose()
@@ -19,9 +28,12 @@ export default function PopupWithForm(props) {
   return (
     <div
       className={`popup popup_type_${name} ${isOpen && 'popup_active'}`}
-      onClick={onClose}
+      onMouseDown={onClose}
     >
-      <div className="popup__container" onClick={(e) => e.stopPropagation()}>
+      <div
+        className="popup__container"
+        onMouseDown={(e) => e.stopPropagation()}
+      >
         <h3 className="popup__title">{title}</h3>
         <form
           className={`popup__form popup__form_type_${name}`}
@@ -33,10 +45,12 @@ export default function PopupWithForm(props) {
           <button
             type="submit"
             name="edit-profile-submit-button"
-            className="popup__submit-button
-responsible-fade responsible-fade_opacity_strong"
+            className={`popup__submit-button
+responsible-fade responsible-fade_opacity_strong ${
+              isSaving && 'popup__submit-button_inactive'
+            }`}
           >
-            {buttonText}
+            {isSaving ? 'Сохранение...' : buttonText}
           </button>
         </form>
         <button

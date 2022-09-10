@@ -20,6 +20,7 @@ function App() {
   const [currentUser, setCurrentUser] = useState({})
   const [cards, setCards] = useState([])
   const [cardToRemove, setCardToRemove] = useState({})
+  const [isSaving, setIsSaving] = useState(false)
 
   function handleCardLike(card, isLiked) {
     api
@@ -31,12 +32,16 @@ function App() {
   }
 
   function handleCardDelete(e) {
+    setIsSaving(true)
     e.preventDefault()
     api
       .removeCard(cardToRemove)
       .then(setCards(cards.filter((e) => e._id !== cardToRemove._id)))
       .catch((err) => console.log(err))
-      .finally(closeAllPopups())
+      .finally(() => {
+        closeAllPopups()
+        setIsSaving(false)
+      })
   }
 
   useEffect(() => {
@@ -78,13 +83,23 @@ function App() {
   }
 
   function handleUpdateUser(user) {
-    api.setUserInfo(user).then((res) => {
-      setCurrentUser(res)
-      closeAllPopups()
-    })
+    setIsSaving(true)
+    setIsLoading(true)
+    api
+      .setUserInfo(user)
+      .then((res) => {
+        setCurrentUser(res)
+        closeAllPopups()
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setIsSaving(false)
+        setIsLoading(false)
+      })
   }
 
   function handleAddCard(card) {
+    setIsSaving(true)
     api
       .createNewCard(card)
       .then((res) => {
@@ -92,6 +107,9 @@ function App() {
         closeAllPopups()
       })
       .catch((err) => console.log(err))
+      .finally(() => {
+        setIsSaving(false)
+      })
   }
 
   return (
@@ -113,6 +131,7 @@ function App() {
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
             onUpdateUser={handleUpdateUser}
+            isSaving={isSaving}
           />
           <PopupWithForm
             name="edit-avatar"
@@ -121,11 +140,13 @@ function App() {
             isOpen={isEditAvatarPopupOpen}
             onClose={closeAllPopups}
             buttonText="Сохранить"
+            isSaving={isSaving}
           />
           <AddPlacePopup
             isOpen={isAddPlacePopupOpen}
             onClose={closeAllPopups}
             onAddCard={handleAddCard}
+            isSaving={isSaving}
           />
           <PopupWithForm
             name="confirm"
@@ -134,6 +155,7 @@ function App() {
             onClose={closeAllPopups}
             onSubmit={handleCardDelete}
             buttonText="Да"
+            isSaving={isSaving}
           />
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />
           <Footer />

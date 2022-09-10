@@ -4,7 +4,7 @@ import PopupWithForm from './PopupWithForm'
 import CurrentUserContext from '../contexts.js/CurrentUserContext'
 
 export default function EditProfilePopup(props) {
-  const { isOpen, onClose, onUpdateUser } = props
+  const { isOpen, onClose, onUpdateUser, isSaving } = props
   const currentUser = useContext(CurrentUserContext)
   const [name, setName] = useState(currentUser.name)
   const [about, setAbout] = useState(currentUser.about)
@@ -29,6 +29,7 @@ export default function EditProfilePopup(props) {
       }}
       buttonText="Сохранить"
       onSubmit={handleSubmit}
+      isSaving={isSaving}
     >
       <ProfileInputs
         userName={name}

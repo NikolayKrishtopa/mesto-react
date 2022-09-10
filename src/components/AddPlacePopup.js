@@ -3,7 +3,7 @@ import PopupWithForm from './PopupWithForm'
 import { useState, useEffect } from 'react'
 
 export default function AddPlacePopup(props) {
-  const { isOpen, onClose, onAddCard } = props
+  const { isOpen, onClose, onAddCard, isSaving } = props
   const [cardName, setCardName] = useState('')
   const [link, setLink] = useState('')
 
@@ -25,6 +25,7 @@ export default function AddPlacePopup(props) {
       onClose={onClose}
       buttonText="Создать"
       onSubmit={handleSubmit}
+      isSaving={isSaving}
     >
       <PlaceInputs
         cardName={cardName}
