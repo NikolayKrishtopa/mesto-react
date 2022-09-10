@@ -61,9 +61,9 @@ class Api {
     )
   }
 
-  handleLikeServer(cardId, isLiked) {
+  handleLikeServer(card, isLiked) {
     const httpMethod = isLiked ? 'DELETE' : 'PUT'
-    return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+    return fetch(`${this._baseUrl}/cards/${card._id}/likes`, {
       method: httpMethod,
       headers: this._headers,
     }).then((res) => this._getResponseData(res, 'загрузке данных с сервера'))

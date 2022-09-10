@@ -17,6 +17,14 @@ export default function Main(props) {
   const currentUser = useContext(CurrentUserContext)
   const [cards, setCards] = useState([])
 
+  function handleCardLike(card, isLiked) {
+    api
+      .handleLikeServer(card, isLiked)
+      .then((newCard) =>
+        setCards(cards.map((e) => (newCard._id === e._id ? newCard : e)))
+      )
+  }
+
   useEffect(() => {
     api
       .getInititalCards()
@@ -79,6 +87,7 @@ export default function Main(props) {
               card={card}
               onCardClick={onCardClick}
               onRemoveClick={onRemoveClick}
+              onCardLike={handleCardLike}
             />
           )
         })}

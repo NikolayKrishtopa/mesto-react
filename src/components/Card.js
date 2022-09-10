@@ -5,31 +5,22 @@ import api from '../utils/api'
 import CurrentUserContext from '../contexts.js/CurrentUserContext'
 
 export default function Card(props) {
-  const { card, onCardClick, onRemoveClick } = props
+  const { card, onCardClick, onRemoveClick, onCardLike } = props
   const { _id: cardId, likes: initialLikes, link, name } = card
 
   const currentUser = useContext(CurrentUserContext)
   const isOwn = card.owner._id === currentUser._id
-
-  const [isLiked, setIsLiked] = useState(
-    initialLikes.filter((e) => e._id === currentUser._id).length !== 0
-  )
-
-  const [likes, setLikes] = useState(initialLikes)
+  const isLiked =
+    card.likes.filter((e) => e._id === currentUser._id).length !== 0
 
   function handleClick() {
     onCardClick(card)
   }
 
   function handleLike() {
-    api.handleLikeServer(cardId, isLiked).then((res) => {
-      setIsLiked(
-        res.likes.filter((e) => e._id === currentUser._id).length !== 0
-      )
-      setLikes(res.likes)
-    })
+    onCardLike(card, isLiked)
   }
-
+  console.log(card.likes)
   return (
     <div id={cardId}>
       <article className="place-card">
@@ -71,7 +62,7 @@ export default function Card(props) {
               />
             </button>
             <p className="place-card__like-counter" id="like-counter">
-              {likes.length}
+              {card.likes.length}
             </p>
           </div>
         </div>
