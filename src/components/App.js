@@ -5,11 +5,11 @@ import Header from './Header'
 import PopupWithForm from './PopupWithForm'
 import ImagePopup from './ImagePopup'
 import AvatarInputs from './AvatarInputs'
-import ProfileInputs from './ProfileInputs'
 import PlaceInputs from './PlaceInputs'
 import PopupLoading from './PopupLoading'
 import api from '../utils/api'
 import CurrentUserContext from '../contexts.js/CurrentUserContext'
+import EditProfilePopup from './EditProfilePopup'
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
@@ -56,6 +56,13 @@ function App() {
     setisConfirmPopupOpen(true)
   }
 
+  function handleUpdateUser(user) {
+    api.setUserInfo(user).then((res) => {
+      setCurrentUser(res)
+      closeAllPopups()
+    })
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
@@ -69,13 +76,10 @@ function App() {
             onCardClick={handleCardClick}
             onRemoveClick={handleRemoveClick}
           />
-          <PopupWithForm
-            name="edit-profile"
-            title="Редактировать профиль"
-            children={<ProfileInputs />}
+          <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
-            buttonText="Сохранить"
+            onUpdateUser={handleUpdateUser}
           />
           <PopupWithForm
             name="edit-avatar"

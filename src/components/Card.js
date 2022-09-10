@@ -1,12 +1,11 @@
 import { useState, useContext } from 'react'
 import trashBinIcon from '../images/trash-bin-icon.svg'
 import likeIcon from '../images/like-icon.svg'
-import api from '../utils/api'
 import CurrentUserContext from '../contexts.js/CurrentUserContext'
 
 export default function Card(props) {
   const { card, onCardClick, onRemoveClick, onCardLike } = props
-  const { _id: cardId, likes: initialLikes, link, name } = card
+  const { _id: cardId, link, name } = card
 
   const currentUser = useContext(CurrentUserContext)
   const isOwn = card.owner._id === currentUser._id

@@ -1,14 +1,9 @@
 import closeIcon from '../images/close-icon.svg'
 import { useEffect } from 'react'
 
-export default function PopupWithForm({
-  name,
-  title,
-  children,
-  isOpen,
-  onClose,
-  buttonText,
-}) {
+export default function PopupWithForm(props) {
+  const { name, title, children, isOpen, onClose, buttonText, onSubmit } = props
+
   function handleCloseByEsc(evt) {
     evt.key === 'Escape' && onClose()
   }
@@ -32,6 +27,7 @@ export default function PopupWithForm({
           className={`popup__form popup__form_type_${name}`}
           noValidate
           name={name}
+          onSubmit={onSubmit}
         >
           {children}
           <button

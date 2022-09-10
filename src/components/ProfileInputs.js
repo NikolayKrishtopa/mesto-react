@@ -1,4 +1,5 @@
-export default function ProfileInputs() {
+export default function ProfileInputs(props) {
+  const { userName, userAbout, onChangeUserName, onChangeUserAbout } = props
   return (
     <>
       <input
@@ -9,6 +10,8 @@ export default function ProfileInputs() {
         required
         minLength="2"
         maxLength="40"
+        value={userName}
+        onChange={(e) => onChangeUserName(e.target.value)}
       />
       <p className="name-error popup__input-error popup__input-error_type_user-name"></p>
       <input
@@ -19,6 +22,8 @@ export default function ProfileInputs() {
         required
         minLength="2"
         maxLength="200"
+        value={userAbout}
+        onChange={(e) => onChangeUserAbout(e.target.value)}
       />
       <p className="about-error popup__input-error popup__input-error_type_user-descr"></p>
     </>
