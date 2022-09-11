@@ -4,12 +4,12 @@ import Footer from './Footer'
 import Header from './Header'
 import PopupWithForm from './PopupWithForm'
 import ImagePopup from './ImagePopup'
-import AvatarInputs from './AvatarInputs'
 import PopupLoading from './PopupLoading'
 import api from '../utils/api'
 import CurrentUserContext from '../contexts.js/CurrentUserContext'
 import EditProfilePopup from './EditProfilePopup'
 import AddPlacePopup from './AddPlacePopup'
+import EditAvatarPopup from './EditAvatarPopup'
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false)
@@ -112,6 +112,10 @@ function App() {
       })
   }
 
+  function handleUpdateAvatar(url) {
+    api.setAvatar(url).then()
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
@@ -133,13 +137,9 @@ function App() {
             onUpdateUser={handleUpdateUser}
             isSaving={isSaving}
           />
-          <PopupWithForm
-            name="edit-avatar"
-            title="Обновить аватар"
-            children={<AvatarInputs />}
+          <EditAvatarPopup
             isOpen={isEditAvatarPopupOpen}
             onClose={closeAllPopups}
-            buttonText="Сохранить"
             isSaving={isSaving}
           />
           <AddPlacePopup
