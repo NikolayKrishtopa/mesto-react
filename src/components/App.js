@@ -40,7 +40,8 @@ function App() {
       .catch((err) => console.log(err))
       .finally(() => {
         closeAllPopups()
-        setIsSaving(false)
+        setTimeout(() => setIsSaving(false), 1000)
+        clearTimeout(() => setIsSaving(false), 1000)
       })
   }
 
@@ -84,17 +85,16 @@ function App() {
 
   function handleUpdateUser(user) {
     setIsSaving(true)
-    setIsLoading(true)
     api
       .setUserInfo(user)
       .then((res) => {
         setCurrentUser(res)
-        closeAllPopups()
       })
       .catch((err) => console.log(err))
       .finally(() => {
-        setIsSaving(false)
-        setIsLoading(false)
+        closeAllPopups()
+        setTimeout(() => setIsSaving(false), 1000)
+        clearTimeout(() => setIsSaving(false), 1000)
       })
   }
 
@@ -104,16 +104,26 @@ function App() {
       .createNewCard(card)
       .then((res) => {
         setCards([res, ...cards])
-        closeAllPopups()
       })
       .catch((err) => console.log(err))
       .finally(() => {
-        setIsSaving(false)
+        closeAllPopups()
+        setTimeout(() => setIsSaving(false), 1000)
+        clearTimeout(() => setIsSaving(false), 1000)
       })
   }
 
   function handleUpdateAvatar(url) {
-    api.setAvatar(url).then()
+    setIsSaving(true)
+    api
+      .setAvatar(url)
+      .then((res) => setCurrentUser(res))
+      .catch((err) => console.log(err))
+      .finally(() => {
+        closeAllPopups()
+        setTimeout(() => setIsSaving(false), 1000)
+        clearTimeout(() => setIsSaving(false), 1000)
+      })
   }
 
   return (
@@ -136,11 +146,13 @@ function App() {
             onClose={closeAllPopups}
             onUpdateUser={handleUpdateUser}
             isSaving={isSaving}
+            onEditAvatar={handleUpdateAvatar}
           />
           <EditAvatarPopup
             isOpen={isEditAvatarPopupOpen}
             onClose={closeAllPopups}
             isSaving={isSaving}
+            onEditAvatar={handleUpdateAvatar}
           />
           <AddPlacePopup
             isOpen={isAddPlacePopupOpen}

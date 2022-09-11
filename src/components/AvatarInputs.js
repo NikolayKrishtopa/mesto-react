@@ -1,7 +1,9 @@
-export default function AvatarInputs() {
+export default function AvatarInputs(props) {
+  const { avatarLinkRef } = props
   return (
     <>
       <input
+        ref={avatarLinkRef}
         type="url"
         required
         className="popup__field popup__field_type_edit-avatar"

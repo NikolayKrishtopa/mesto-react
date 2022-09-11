@@ -1,8 +1,14 @@
+import { useRef } from 'react'
 import PopupWithForm from './PopupWithForm'
 import AvatarInputs from './AvatarInputs'
 
 export default function EditAvatarPopup(props) {
-  const { isOpen, onClose, isSaving } = props
+  const { isOpen, onClose, isSaving, onEditAvatar } = props
+  const avatarLinkRef = useRef()
+  function handleEditAvatar(e) {
+    e.preventDefault()
+    onEditAvatar(avatarLinkRef.current.value)
+  }
   return (
     <PopupWithForm
       name="edit-avatar"
@@ -11,8 +17,9 @@ export default function EditAvatarPopup(props) {
       onClose={onClose}
       buttonText="Сохранить"
       isSaving={isSaving}
+      onSubmit={handleEditAvatar}
     >
-      <AvatarInputs />
+      <AvatarInputs avatarLinkRef={avatarLinkRef} />
     </PopupWithForm>
   )
 }
