@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import PopupWithForm from './PopupWithForm'
 import AvatarInputs from './AvatarInputs'
 
@@ -9,6 +9,11 @@ export default function EditAvatarPopup(props) {
     e.preventDefault()
     onEditAvatar(avatarLinkRef.current.value)
   }
+
+  useEffect(() => {
+    avatarLinkRef.current.value = ''
+  }, [isOpen])
+
   return (
     <PopupWithForm
       name="edit-avatar"
