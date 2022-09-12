@@ -2,21 +2,23 @@ import { useState, useContext, useEffect } from 'react'
 import PopupWithForm from './PopupWithForm'
 import CurrentUserContext from '../contexts.js/CurrentUserContext'
 import Input from './Input'
+import useFormAndValidation from '../hooks/useFormAndValidation'
 
 export default function EditProfilePopup(props) {
   const { isOpen, onClose, onUpdateUser, isSaving } = props
+
   const currentUser = useContext(CurrentUserContext)
-  const [userName, setUserName] = useState(currentUser.name)
-  const [userAbout, setUserAbout] = useState(currentUser.about)
+
+  const { values, handleChange, errors, isValid, resetForm } =
+    useFormAndValidation()
 
   useEffect(() => {
-    setUserName(currentUser.name)
-    setUserAbout(currentUser.about)
+    resetForm({ userName: currentUser.name, userAbout: currentUser.about })
   }, [isOpen])
 
   function handleSubmit(e) {
     e.preventDefault()
-    onUpdateUser({ name: userName, about: userAbout })
+    onUpdateUser({ name: values.userName, about: values.userAbout })
   }
 
   return (
@@ -30,18 +32,23 @@ export default function EditProfilePopup(props) {
       buttonText="Сохранить"
       onSubmit={handleSubmit}
       isSaving={isSaving}
+      isValid={isValid}
     >
       <Input
         type="text"
+        name="userName"
         placeholder="Имя пользователя"
-        value={userName ? userName : ''}
-        onChange={setUserName}
+        value={values.userName ? values.userName : ''}
+        onChange={handleChange}
+        errorText={errors.userName}
       />
       <Input
         type="text"
+        name="userAbout"
         placeholder="Расскажите о себе"
-        value={userAbout ? userAbout : ''}
-        onChange={setUserAbout}
+        value={values.userAbout ? values.userAbout : ''}
+        onChange={handleChange}
+        errorText={errors.userAbout}
       />
     </PopupWithForm>
   )

@@ -1,20 +1,20 @@
 import Input from './Input'
 import PopupWithForm from './PopupWithForm'
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
+import useFormAndValidation from '../hooks/useFormAndValidation'
 
 export default function AddPlacePopup(props) {
   const { isOpen, onClose, onAddCard, isSaving } = props
-  const [cardName, setCardName] = useState('')
-  const [cardLink, setCardLink] = useState('')
+  const { values, handleChange, errors, isValid, resetForm } =
+    useFormAndValidation()
 
   useEffect(() => {
-    setCardName('')
-    setCardLink('')
+    resetForm()
   }, [isOpen])
 
   function handleSubmit(e) {
     e.preventDefault()
-    onAddCard({ name: cardName, link: cardLink })
+    onAddCard({ name: values.cardName, link: values.cardLink })
   }
 
   return (
@@ -26,18 +26,24 @@ export default function AddPlacePopup(props) {
       buttonText="Создать"
       onSubmit={handleSubmit}
       isSaving={isSaving}
+      isValid={isValid}
     >
       <Input
+        name="cardName"
         type="text"
+        maxLength={40}
         placeholder="Название"
-        value={cardName}
-        onChange={setCardName}
+        value={values.cardName ? values.cardName : ''}
+        onChange={handleChange}
+        errorText={errors.cardName}
       />
       <Input
+        name="cardLink"
         type="url"
         placeholder="Ссылка на картинку"
-        value={cardLink}
-        onChange={setCardLink}
+        value={values.cardLink ? values.cardLink : ''}
+        onChange={handleChange}
+        errorText={errors.cardLink}
       />
     </PopupWithForm>
   )

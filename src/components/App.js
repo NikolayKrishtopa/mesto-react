@@ -180,6 +180,7 @@ function App() {
             onSubmit={handleCardDelete}
             buttonText="Да"
             isSaving={isSaving}
+            isValid={true}
           />
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />
           <Footer />

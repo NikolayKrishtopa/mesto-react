@@ -11,6 +11,7 @@ export default function PopupWithForm(props) {
     buttonText,
     onSubmit,
     isSaving,
+    isValid,
   } = props
 
   function handleCloseByEsc(evt) {
@@ -39,7 +40,7 @@ export default function PopupWithForm(props) {
             name="edit-profile-submit-button"
             className={`popup__submit-button
 responsible-fade responsible-fade_opacity_strong ${
-              isSaving && 'popup__submit-button_inactive'
+              (isSaving || !isValid) && 'popup__submit-button_inactive'
             }`}
           >
             {isSaving ? 'Сохранение...' : buttonText}

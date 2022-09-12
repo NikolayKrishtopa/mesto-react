@@ -1,17 +1,21 @@
 import { useEffect, useState } from 'react'
 import PopupWithForm from './PopupWithForm'
 import Input from './Input'
+import useFormAndValidation from '../hooks/useFormAndValidation'
 
 export default function EditAvatarPopup(props) {
   const { isOpen, onClose, isSaving, onEditAvatar } = props
-  const [avatarLink, setAvatarLink] = useState('')
+
+  const { values, handleChange, errors, isValid, resetForm } =
+    useFormAndValidation()
+
   function handleEditAvatar(e) {
     e.preventDefault()
-    onEditAvatar(avatarLink)
+    onEditAvatar(values.avatarLink)
   }
 
   useEffect(() => {
-    setAvatarLink('')
+    resetForm()
   }, [isOpen])
 
   return (
@@ -23,12 +27,15 @@ export default function EditAvatarPopup(props) {
       buttonText="Сохранить"
       isSaving={isSaving}
       onSubmit={handleEditAvatar}
+      isValid={isValid}
     >
       <Input
+        name="avatarLink"
         type="url"
         placeholder="Ссылка на картинку"
-        value={avatarLink}
-        onChange={setAvatarLink}
+        value={values.avatarLink ? values.avatarLink : ''}
+        onChange={handleChange}
+        errorText={errors.avatarLink}
       />
     </PopupWithForm>
   )

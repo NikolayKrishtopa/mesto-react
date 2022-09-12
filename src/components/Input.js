@@ -1,23 +1,34 @@
 export default function Input(props) {
-  const { type, id, placeholder, value, onChange, isValid, maxLength } = props
+  const {
+    type,
+    name,
+    placeholder,
+    value,
+    onChange,
+    isValid,
+    maxLength,
+    errorText,
+  } = props
   return (
     <>
       <input
         type={type}
         className="popup__field"
-        id={id}
+        name={name}
         placeholder={placeholder}
         required
         minLength="2"
         maxLength={maxLength}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={onChange}
       />
       <p
         className={`popup__input-error ${
           !isValid && 'popup__input-error_active'
         }`}
-      ></p>
+      >
+        {errorText}
+      </p>
     </>
   )
 }
