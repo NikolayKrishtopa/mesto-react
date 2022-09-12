@@ -1,19 +1,11 @@
 export default function Input(props) {
-  const {
-    type,
-    name,
-    placeholder,
-    value,
-    onChange,
-    isValid,
-    maxLength,
-    errorText,
-  } = props
+  const { type, name, placeholder, value, onChange, maxLength, errorText } =
+    props
   return (
     <>
       <input
         type={type}
-        className="popup__field"
+        className={`popup__field ${errorText && 'popup__field_state_error'}`}
         name={name}
         placeholder={placeholder}
         required
@@ -24,7 +16,7 @@ export default function Input(props) {
       />
       <p
         className={`popup__input-error ${
-          !isValid && 'popup__input-error_active'
+          errorText && 'popup__input-error_active'
         }`}
       >
         {errorText}
