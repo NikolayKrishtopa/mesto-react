@@ -1,5 +1,5 @@
 export default function Input(props) {
-  const { type, id, placeholder, value, onChange, isValid } = props
+  const { type, id, placeholder, value, onChange, isValid, maxLength } = props
   return (
     <>
       <input
@@ -9,7 +9,7 @@ export default function Input(props) {
         placeholder={placeholder}
         required
         minLength="2"
-        maxLength="40"
+        maxLength={maxLength}
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
