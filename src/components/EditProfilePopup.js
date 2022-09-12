@@ -1,22 +1,22 @@
 import { useState, useContext, useEffect } from 'react'
-import ProfileInputs from './ProfileInputs'
 import PopupWithForm from './PopupWithForm'
 import CurrentUserContext from '../contexts.js/CurrentUserContext'
+import Input from './Input'
 
 export default function EditProfilePopup(props) {
   const { isOpen, onClose, onUpdateUser, isSaving } = props
   const currentUser = useContext(CurrentUserContext)
-  const [name, setName] = useState(currentUser.name)
-  const [about, setAbout] = useState(currentUser.about)
+  const [userName, setUserName] = useState(currentUser.name)
+  const [userAbout, setUserAbout] = useState(currentUser.about)
 
   useEffect(() => {
-    setName(currentUser.name)
-    setAbout(currentUser.about)
+    setUserName(currentUser.name)
+    setUserAbout(currentUser.about)
   }, [isOpen])
 
   function handleSubmit(e) {
     e.preventDefault()
-    onUpdateUser({ name, about })
+    onUpdateUser({ name: userName, about: userAbout })
   }
 
   return (
@@ -31,11 +31,17 @@ export default function EditProfilePopup(props) {
       onSubmit={handleSubmit}
       isSaving={isSaving}
     >
-      <ProfileInputs
-        userName={name}
-        userAbout={about}
-        onChangeUserName={setName}
-        onChangeUserAbout={setAbout}
+      <Input
+        type="text"
+        placeholder="Имя пользователя"
+        value={userName ? userName : ''}
+        onChange={setUserName}
+      />
+      <Input
+        type="text"
+        placeholder="Расскажите о себе"
+        value={userAbout ? userAbout : ''}
+        onChange={setUserAbout}
       />
     </PopupWithForm>
   )
