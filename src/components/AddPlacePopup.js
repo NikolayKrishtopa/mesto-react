@@ -1,20 +1,20 @@
-import PlaceInputs from './PlaceInputs'
+import Input from './Input'
 import PopupWithForm from './PopupWithForm'
 import { useState, useEffect } from 'react'
 
 export default function AddPlacePopup(props) {
   const { isOpen, onClose, onAddCard, isSaving } = props
   const [cardName, setCardName] = useState('')
-  const [link, setLink] = useState('')
+  const [cardLink, setCardLink] = useState('')
 
   useEffect(() => {
     setCardName('')
-    setLink('')
+    setCardLink('')
   }, [isOpen])
 
   function handleSubmit(e) {
     e.preventDefault()
-    onAddCard({ name: cardName, link: link })
+    onAddCard({ name: cardName, link: cardLink })
   }
 
   return (
@@ -27,11 +27,17 @@ export default function AddPlacePopup(props) {
       onSubmit={handleSubmit}
       isSaving={isSaving}
     >
-      <PlaceInputs
-        cardName={cardName}
-        link={link}
-        onCardNameChange={setCardName}
-        onLinkChange={setLink}
+      <Input
+        type="text"
+        placeholder="Название"
+        value={cardName}
+        onChange={setCardName}
+      />
+      <Input
+        type="url"
+        placeholder="Ссылка на картинку"
+        value={cardLink}
+        onChange={setCardLink}
       />
     </PopupWithForm>
   )
