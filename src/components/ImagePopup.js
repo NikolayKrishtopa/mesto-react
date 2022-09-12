@@ -1,10 +1,8 @@
 import closeIcon from '../images/close-icon.svg'
 import { useEffect } from 'react'
 
-export default function ImagePopup({ card, onClose }) {
-  function handleCloseByEsc(evt) {
-    evt.key === 'Escape' && onClose()
-  }
+export default function ImagePopup(props) {
+  const { card, onClose } = props
 
   return (
     <div

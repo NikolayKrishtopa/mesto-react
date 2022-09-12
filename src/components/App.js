@@ -37,7 +37,9 @@ function App() {
     api
       .removeCard(cardToRemove)
       .then(() => {
-        setCards(cards.filter((e) => e._id !== cardToRemove._id))
+        setCards((oldCardsArr) =>
+          oldCardsArr.filter((cardItem) => cardItem._id !== cardToRemove._id)
+        )
         closeAllPopups()
       })
       .catch((err) => console.log(err))
@@ -51,14 +53,15 @@ function App() {
         setCurrentUser(userData)
       })
       .catch((err) => console.log(err))
-      .finally(setIsLoading(false))
+      .finally(() => setIsLoading(false))
   }, [])
 
   const isAnyPopupOpen =
     isEditAvatarPopupOpen ||
     isEditProfilePopupOpen ||
     isAddPlacePopupOpen ||
-    selectedCard.link
+    selectedCard.link ||
+    cardToRemove.link
 
   useEffect(() => {
     function closeByEscape(evt) {
@@ -175,7 +178,7 @@ function App() {
           <PopupWithForm
             name="confirm"
             title="Вы уверены?"
-            isOpen={Object.keys(cardToRemove).length > 0}
+            isOpen={cardToRemove.link}
             onClose={closeAllPopups}
             onSubmit={handleCardDelete}
             buttonText="Да"
