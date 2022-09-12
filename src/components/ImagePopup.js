@@ -6,14 +6,6 @@ export default function ImagePopup({ card, onClose }) {
     evt.key === 'Escape' && onClose()
   }
 
-  useEffect(() => {
-    document.addEventListener('keyup', handleCloseByEsc)
-
-    return () => {
-      document.removeEventListener('keyup', handleCloseByEsc)
-    }
-  }, [])
-
   return (
     <div
       className={`popup popup_type_picture-full-screen ${

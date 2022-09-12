@@ -28,7 +28,11 @@ export default function Main(props) {
             onClick={onEditAvatar}
             className="profile__edit-avatar-button responsible-fade responsible-fade_opacity_strong"
           >
-            <img src={currentUser.avatar} alt="" className="profile__avatar" />
+            <img
+              src={currentUser.avatar}
+              alt={currentUser.name}
+              className="profile__avatar"
+            />
           </button>
           <div className="profile__info">
             <div className="profile__container">

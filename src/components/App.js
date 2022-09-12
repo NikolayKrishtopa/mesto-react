@@ -36,13 +36,12 @@ function App() {
     e.preventDefault()
     api
       .removeCard(cardToRemove)
-      .then(setCards(cards.filter((e) => e._id !== cardToRemove._id)))
-      .catch((err) => console.log(err))
-      .finally(() => {
+      .then(() => {
+        setCards(cards.filter((e) => e._id !== cardToRemove._id))
         closeAllPopups()
-        setTimeout(() => setIsSaving(false), 1000)
-        clearTimeout(() => setIsSaving(false), 1000)
       })
+      .catch((err) => console.log(err))
+      .finally(() => setIsSaving(false))
   }
 
   useEffect(() => {
@@ -54,6 +53,26 @@ function App() {
       .catch((err) => console.log(err))
       .finally(setIsLoading(false))
   }, [])
+
+  const isAnyPopupOpen =
+    isEditAvatarPopupOpen ||
+    isEditProfilePopupOpen ||
+    isAddPlacePopupOpen ||
+    selectedCard.link
+
+  useEffect(() => {
+    function closeByEscape(evt) {
+      if (evt.key === 'Escape') {
+        closeAllPopups()
+      }
+    }
+    if (isAnyPopupOpen) {
+      document.addEventListener('keydown', closeByEscape)
+      return () => {
+        document.removeEventListener('keydown', closeByEscape)
+      }
+    }
+  }, [isAnyPopupOpen])
 
   function handleCardClick(card) {
     setSelectedCard(card)
@@ -89,13 +108,10 @@ function App() {
       .setUserInfo(user)
       .then((res) => {
         setCurrentUser(res)
+        closeAllPopups()
       })
       .catch((err) => console.log(err))
-      .finally(() => {
-        closeAllPopups()
-        setTimeout(() => setIsSaving(false), 1000)
-        clearTimeout(() => setIsSaving(false), 1000)
-      })
+      .finally(() => setIsSaving(false))
   }
 
   function handleAddCard(card) {
@@ -104,26 +120,22 @@ function App() {
       .createNewCard(card)
       .then((res) => {
         setCards([res, ...cards])
+        closeAllPopups()
       })
       .catch((err) => console.log(err))
-      .finally(() => {
-        closeAllPopups()
-        setTimeout(() => setIsSaving(false), 1000)
-        clearTimeout(() => setIsSaving(false), 1000)
-      })
+      .finally(() => setIsSaving(false))
   }
 
   function handleUpdateAvatar(url) {
     setIsSaving(true)
     api
       .setAvatar(url)
-      .then((res) => setCurrentUser(res))
-      .catch((err) => console.log(err))
-      .finally(() => {
+      .then((res) => {
+        setCurrentUser(res)
         closeAllPopups()
-        setTimeout(() => setIsSaving(false), 1000)
-        clearTimeout(() => setIsSaving(false), 1000)
       })
+      .catch((err) => console.log(err))
+      .finally(() => setIsSaving(false))
   }
 
   return (

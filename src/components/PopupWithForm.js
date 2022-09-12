@@ -17,14 +17,6 @@ export default function PopupWithForm(props) {
     evt.key === 'Escape' && onClose()
   }
 
-  useEffect(() => {
-    document.addEventListener('keyup', handleCloseByEsc)
-
-    return () => {
-      document.removeEventListener('keyup', handleCloseByEsc)
-    }
-  }, [])
-
   return (
     <div
       className={`popup popup_type_${name} ${isOpen && 'popup_active'}`}
